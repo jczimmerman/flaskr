@@ -5,14 +5,16 @@ with open("README.md", "r") as f:
 
 
 setuptools.setup(
-    name="Flaskr"
-    version="0.0.1",
+    name="flaskr",
+    version="1.0.0",
     author="Joseph Zimmerman",
     author_email="joeyzimmerman17@gmail.com",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    install_requires=[],
+    install_requires=[
+        'flask',
+    ],
     extras_require=[],
     tests_require=['pytest'],
     python_requires='>=3.6',
