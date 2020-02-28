@@ -97,3 +97,35 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('blog.index'))
+
+#test
+
+@bp.route('/<int:id>/view', methods=('GET', 'POST'))
+def view(id):
+
+    db = get_db()
+    post = db.execute(
+    'SELECT p.id, title, body, created, author_id, username'
+    ' FROM post p JOIN user u ON p.author_id = u.id'
+    ' WHERE p.id = ?',
+    (id,)
+    ).fetchone()
+
+    if request.method == 'POST':
+        body = request.form['body']
+
+        db.execute(
+            'INSERT INTO comments (user_id, post_id, body)'
+            ' VALUES (?, ?, ?)',
+            (g.user['id'], id, body)
+        )
+        db.commit()
+
+    comments = db.execute(
+    'SELECT c.id, c.body'
+    ' FROM post p JOIN comments c ON p.id = c.post_id'
+    ' WHERE post_id = ?',
+    (id,)
+    ).fetchall()
+
+    return render_template('blog/view.html', post=post, comments=comments)
